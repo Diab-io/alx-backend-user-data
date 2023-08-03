@@ -2,7 +2,9 @@
 """filter_logger module"""
 import re
 import logging
+import mysql.connector
 from typing import List
+import os
 
 
 patterns = {
@@ -31,6 +33,23 @@ def get_logger() -> logging.Logger:
     user_logger.propagate = False
     user_logger.addHandler(handler)
     return user_logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """ function that creates a connection to a database
+    """
+    host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
+    user = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
+
+    conn = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password,
+        database='my_db'
+    )
+
+    return conn
 
 
 class RedactingFormatter(logging.Formatter):
