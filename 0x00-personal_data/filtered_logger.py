@@ -21,7 +21,9 @@ def filter_datum(
     extract, replace = (patterns["extract"], patterns["replace"])
     return re.sub(extract(fields, separator), replace(redaction), message)
 
+
 def get_logger() -> logging.Logger:
+    """Function used in creating a logger"""
     user_logger = logging.getLogger('user_data')
     handler = logging.StreamHandler()
     handler.setFormatter(RedactingFormatter(PII_FIELDS))
