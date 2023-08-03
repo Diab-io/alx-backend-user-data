@@ -38,10 +38,10 @@ def get_logger() -> logging.Logger:
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ function that creates a connection to a database
     """
-    host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    user = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
-    password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
-    db_name = os.environ.get('PERSONAL_DATA_DB_NAME')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    user = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME', '')
 
     conn = mysql.connector.connect(
         host=host,
