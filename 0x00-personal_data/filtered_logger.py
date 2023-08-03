@@ -98,3 +98,7 @@ class RedactingFormatter(logging.Formatter):
         red_txt = filter_datum(self.fields, self.REDACTION,
                                msg_format, self.SEPARATOR)
         return red_txt
+
+
+if __name__ == '__main__':
+    main()
