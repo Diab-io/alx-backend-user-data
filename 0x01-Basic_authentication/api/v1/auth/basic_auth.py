@@ -4,9 +4,13 @@ Basic Authentication module
 """
 from .auth import Auth
 import base64
+import binascii
 
 
 class BasicAuth(Auth):
+    """
+    Contains all methods for Basic authentication
+    """
     def extract_base64_authorization_header(self,
                                             authorization_header: str) -> str:
         """
@@ -20,3 +24,18 @@ class BasicAuth(Auth):
             return None
         auth_header_content = authorization_header.split(' ')[-1]
         return auth_header_content
+
+    def decode_base64_authorization_header(
+            self, base64_authorization_header: str) -> str:
+        """
+        Decodes the authorization header
+        """
+        if base64_authorization_header is None:
+            return None
+        if not isinstance(base64_authorization_header, str):
+            return None
+        try:
+            msg = base64.b64decode(base64_authorization_header, validate=True)
+            return msg.decode('utf-8')
+        except (binascii.Error, UnicodeDecodeError):
+            return None
