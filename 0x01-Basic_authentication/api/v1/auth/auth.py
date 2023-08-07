@@ -24,9 +24,16 @@ class Auth:
         return False
 
     def authorization_header(self, request=None) -> str:
-        """ Method that handles processes in the authorization header
+        """ Method that returns the val of the authorization header
         """
-        return None
+        if request is None:
+            return None
+
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return None
+
+        return auth_header
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ Method that gets current user if authenticated
