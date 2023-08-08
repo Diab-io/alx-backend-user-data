@@ -42,4 +42,3 @@ def forbidden():
       - Forbidden error.
     """
     abort(403)
-
