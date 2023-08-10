@@ -2,3 +2,4 @@ __pycache__
 api_env
 .db_User.json
 .DS_Store
+main*.py
