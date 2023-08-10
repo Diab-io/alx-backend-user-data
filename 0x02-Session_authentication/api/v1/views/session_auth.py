@@ -2,7 +2,7 @@
 """ Module of session auth views
 """
 from api.v1.views import app_views
-from flask import request, jsonify, session
+from flask import request, jsonify, session, abort
 from models.user import User
 import os
 
@@ -36,3 +36,19 @@ def session_login():
     user_obj.set_cookie(SESSION_NAME, session_id)
 
     return user_obj
+
+
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
+def session_logout():
+    """
+    DELETE /api/v1/auth_session/login
+    This route deletes the session and simulates
+    logging out the user
+    """
+    from api.v1.app import auth
+
+    del_session = auth.destroy_session(request)
+    if not del_session:
+        abort(404)
+    return jsonify({}), 200
