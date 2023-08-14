@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, class_mapper
 from sqlalchemy.orm.session import Session
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
 
@@ -40,3 +42,27 @@ class DB:
         self.__session.commit()
 
         return user_obj
+
+    def find_user_by(self, **kwargs) -> User:
+        """Method used to get the user from the db
+        """
+        for key, value in kwargs.items():
+            columns = class_mapper(User).columns
+            query = self.__session.query(User)
+            if key not in columns:
+                raise InvalidRequestError
+            user = query.filter(getattr(User, key) == value).first()
+            if user is None:
+                raise NoResultFound
+            return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Method that updates the user with the specified id
+        """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError
+        self.__session.commit()
