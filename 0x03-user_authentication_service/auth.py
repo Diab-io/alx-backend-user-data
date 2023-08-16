@@ -57,9 +57,7 @@ class Auth:
         try:
             session_id = _generate_uuid()
             user_check = self._db.find_user_by(email=email)
-            user_check.session_id = session_id
-            self._db._session.commit()
-
+            self._db.update_user(user_check.id, session_id=session_id)
             return session_id
         except Exception:
             return
@@ -74,3 +72,10 @@ class Auth:
             return user
         except NoResultFound:
             return None
+
+    def destroy_session(self, user_id: int) -> None:
+        """Destroys the session of the specified user
+        """
+        if user_id is None:
+            return None
+        self._db.update_user(user_id, session_id=None)
