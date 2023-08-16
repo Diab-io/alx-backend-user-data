@@ -5,6 +5,7 @@ from bcrypt import hashpw, gensalt, checkpw
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
+from typing import Union
 import uuid
 
 
@@ -40,7 +41,7 @@ class Auth:
         raise ValueError(f"User {user_check.email} already exists")
 
     def valid_login(self, email: str, password: str) -> bool:
-        """Validats the user
+        """Validates the user
         """
         try:
             user_check = self._db.find_user_by(email=email)
@@ -51,7 +52,7 @@ class Auth:
             return False
 
     def create_session(self, email: str) -> str:
-        """
+        """Creates a session for the user
         """
         try:
             session_id = _generate_uuid()
@@ -62,3 +63,11 @@ class Auth:
             return session_id
         except Exception:
             return
+
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+        """Gets a user from the provided session_id
+        """
+        user = self._db.find_user_by(session_id=session_id)
+        if not user or session_id is None:
+            return None
+        return user
