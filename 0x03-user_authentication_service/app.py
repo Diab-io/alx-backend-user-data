@@ -96,7 +96,7 @@ def update_password():
     reset_token = request.form.get("reset_token")
     check_password_change = False
     try:
-        Auth.update_password(reset_token, new_password)
+        AUTH.update_password(reset_token, new_password)
         check_password_change = True
     except ValueError:
         check_password_change = False
