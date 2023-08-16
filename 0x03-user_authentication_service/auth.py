@@ -15,6 +15,12 @@ def _hash_password(password: str) -> bytes:
     return pass_hash
 
 
+def _generate_uuid(self) -> str:
+        """Generates a uuid string
+        """
+        return uuid.uuid4()
+
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -44,7 +50,7 @@ class Auth:
         except Exception:
             return False
 
-    def _generate_uuid(self) -> str:
-        """Generates a uuid string
+    def create_session(self, email: str) -> str:
         """
-        return uuid.uuid4()
+        """
+        pass
