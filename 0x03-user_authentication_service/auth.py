@@ -53,4 +53,12 @@ class Auth:
     def create_session(self, email: str) -> str:
         """
         """
-        pass
+        try:
+            session_id = _generate_uuid()
+            user_check = self._db.find_user_by(email=email)
+            user_check.session_id = session_id
+            self._db._session.commit()
+
+            return session_id
+        except Exception:
+            return
