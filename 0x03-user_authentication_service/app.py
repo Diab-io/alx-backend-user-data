@@ -92,16 +92,12 @@ def update_password():
     """This route updates the user's password
     """
     email = request.form.get("email")
-    password = request.form.get("password")
+    new_password = request.form.get("new_password")
     reset_token = request.form.get("reset_token")
-    is_password_changed = False
 
     try:
-        Auth.update_password(reset_token, password)
-        is_password_changed = True
+        Auth.update_password(reset_token, new_password)
     except ValueError:
-        is_password_changed = False
-    if not is_password_changed:
         abort(403)
     return jsonify({"email": email, "message": "Password updated"})
 
