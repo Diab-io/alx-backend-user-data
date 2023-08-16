@@ -35,11 +35,14 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add user to the database
         """
-        user_obj = User(email=email, hashed_password=hashed_password)
-        if not self.__session:
-            self._session
-        self.__session.add(user_obj)
-        self.__session.commit()
+        try:
+            new_user = User(email=email, hashed_password=hashed_password)
+            self._session.add(new_user)
+            self._session.commit()
+        except Exception:
+            self._session.rollback()
+            new_user = None
+        return new_user
 
         return user_obj
 
@@ -48,7 +51,7 @@ class DB:
         """
         for key, value in kwargs.items():
             columns = class_mapper(User).columns
-            query = self.__session.query(User)
+            query = self._session.query(User)
             if key not in columns:
                 raise InvalidRequestError
             user = query.filter(getattr(User, key) == value).first()
