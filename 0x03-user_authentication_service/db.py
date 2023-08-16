@@ -52,7 +52,7 @@ class DB:
             if key not in columns:
                 raise InvalidRequestError
             user = query.filter(getattr(User, key) == value).first()
-            if user is None:
+            if not user:
                 raise NoResultFound
             return user
 

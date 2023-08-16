@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
-def index_page():
+def index():
     """Returns a simple payload
     """
     return jsonify({"message": "Bienvenue"})
@@ -54,12 +54,14 @@ def logout() -> str:
     """DELETE /sessions
     Implements the logout
     """
-    session_id = request.cookies.get('session_id')
-    user = Auth.get_user_from_session_id(session_id)
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+    
     if user is None:
-        abort(403)
-    Auth.destroy_session(user.id)
-    return redirect("/")
+        abort(403)  # Unauthorized
+    AUTH.destroy_session(user.id)
+    
+    return redirect("/")  # Redirect after successful logout
 
 
 if __name__ == "__main__":
