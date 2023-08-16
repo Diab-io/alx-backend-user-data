@@ -30,4 +30,4 @@ class Auth:
             hash_pass = _hash_password(password)
             user_obj = self._db.add_user(email, hash_pass)
             return user_obj
-        raise ValueError("User <user's email> already exists")
+        raise ValueError(f"User {user_check.email} already exists")
